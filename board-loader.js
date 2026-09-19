@@ -1,20 +1,19 @@
 (async function(){
-  let DATA;
-  try {
-    const p1=(await(await fetch('cards.b64.part1',{cache:'no-store'})).text()).trim();
-    const p2=(await(await fetch('cards.b64.part2',{cache:'no-store'})).text()).trim();
-    const b64=(p1+p2).trim();
-    const bytes=Uint8Array.from(atob(b64),c=>c.charCodeAt(0));
-    const text=await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).text();
-    DATA=JSON.parse(text);
-  } catch(err) {
-    console.warn('b64 parts failed, trying cards.json', err);
-    const res=await fetch('cards.json',{cache:'no-store'});
-    if(!res.ok) throw new Error('HTTP '+res.status);
-    DATA=await res.json();
+  const man=await (await fetch('cards-manifest.json',{cache:'no-store'})).json();
+  const meta=await (await fetch(man.meta,{cache:'no-store'})).json();
+  const cards=await Promise.all(man.cards.map(async id=>{
+    const r=await fetch('cards/'+id+'.json',{cache:'no-store'});
+    if(!r.ok) throw new Error('card '+id+' '+r.status);
+    return r.json();
+  }));
+  window.__BOARD_DATA__=Object.assign({}, meta, {cards});
+  for (const src of ['board-app-0.js','board-app-1.js','board-app-2.js']) {
+    await new Promise((resolve,reject)=>{
+      const s=document.createElement('script');
+      s.src=src;
+      s.onload=resolve;
+      s.onerror=()=>reject(new Error('fail '+src));
+      document.body.appendChild(s);
+    });
   }
-  window.__BOARD_DATA__=DATA;
-  const s=document.createElement('script');
-  s.src='board-app.js';
-  document.body.appendChild(s);
 })();

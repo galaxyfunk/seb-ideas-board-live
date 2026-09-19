@@ -1,11 +1,17 @@
 (async function(){
   try {
-    const css = await (await fetch('styles.css',{cache:'no-store'})).text();
+    const cssParts = await Promise.all(['styles-a.css','styles-b.css'].map(u => fetch(u,{cache:'no-store'}).then(r=>{
+      if(!r.ok) throw new Error(u+' '+r.status);
+      return r.text();
+    })));
     const st = document.createElement('style');
-    st.textContent = css;
+    st.textContent = cssParts.join('');
     document.head.appendChild(st);
-    const js = await (await fetch('board-app.js',{cache:'no-store'})).text();
-    (0, eval)(js);
+    const parts = await Promise.all([...Array(5).keys()].map(i => fetch('board-app-'+i+'.js',{cache:'no-store'}).then(r=>{
+      if(!r.ok) throw new Error('board-app-'+i+'.js '+r.status);
+      return r.text();
+    })));
+    (0, eval)(parts.join(''));
   } catch (err) {
     console.error(err);
     document.body.innerHTML = '<main style="font-family:system-ui;padding:2rem"><h1>Seb Ideas Board</h1><p>Failed to load board: '+String(err)+'</p></main>';

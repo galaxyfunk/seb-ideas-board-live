@@ -1,19 +1,12 @@
 (async function(){
-  const man=await (await fetch('cards-manifest.json',{cache:'no-store'})).json();
-  const meta=await (await fetch(man.meta,{cache:'no-store'})).json();
-  const cards=await Promise.all(man.cards.map(async id=>{
-    const r=await fetch('cards/'+id+'.json',{cache:'no-store'});
-    if(!r.ok) throw new Error('card '+id+' '+r.status);
-    return r.json();
-  }));
-  window.__BOARD_DATA__=Object.assign({}, meta, {cards});
-  for (const src of ['board-app-0.js','board-app-1.js','board-app-2.js']) {
-    await new Promise((resolve,reject)=>{
-      const s=document.createElement('script');
-      s.src=src;
-      s.onload=resolve;
-      s.onerror=()=>reject(new Error('fail '+src));
-      document.body.appendChild(s);
-    });
+  try {
+    const parts = await Promise.all([0,1,2].map(i => fetch('j'+i+'.b64',{cache:'no-store'}).then(r=>r.text())));
+    const b64 = parts.map(t => t.trim()).join('');
+    const bytes = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+    const text = await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).text();
+    (0, eval)(text);
+  } catch (err) {
+    console.error(err);
+    document.body.innerHTML = '<main style="font-family:system-ui;padding:2rem"><h1>Seb Ideas Board</h1><p>Failed to load board-loader: '+String(err)+'</p></main>';
   }
 })();

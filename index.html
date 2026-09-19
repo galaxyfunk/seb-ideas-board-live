@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Seb · Cloud Employee ideas · Jul–Sep 2026</title>
+
+<link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="header-top">
+      <div>
+        <h1>Seb · Cloud Employee ideas</h1>
+        <p class="sub">2026-07-19 → 2026-09-19 · WITA · Board v2</p>
+      </div>
+      <div class="header-actions">
+        <p class="count" id="filter-count">67 ideas</p>
+        <button type="button" class="picks-chip" id="picks-chip" title="Hook picks (local)">Picks 0</button>
+      </div>
+    </div>
+    <div class="filters" id="filters">
+      <div class="filter-row" id="hook-type-filters">
+        <span class="filter-label">Hook</span>
+      </div>
+      <div class="filter-row" id="theme-filters">
+        <span class="filter-label">Theme</span>
+      </div>
+      <div class="filter-row" id="score-filters">
+        <span class="filter-label">Score</span>
+      </div>
+      <div class="filter-row">
+        <span class="filter-label">Search</span>
+        <div class="search-wrap">
+          <input type="search" id="search" placeholder="Title, hook, tags…" autocomplete="off"/>
+        </div>
+        <div class="filter-actions">
+          <button type="button" class="btn-ghost" id="clear-filters">Clear filters</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="masonry" id="grid"></div>
+  <div class="empty" id="empty" hidden>No ideas match these filters.</div>
+</main>
+
+<footer>
+  Enriched from Fireflies Jul–Sep 2026 · Hook variants from HOOK_BANK · No invented CE stats
+</footer>
+
+<div class="overlay" id="overlay" aria-hidden="true"></div>
+<aside class="sidebar" id="sidebar" aria-hidden="true" role="dialog" aria-labelledby="sb-title">
+  <div class="sidebar-header">
+    <h2 id="sb-title"></h2>
+    <button type="button" class="close-btn" id="close-sidebar" aria-label="Close">×</button>
+  </div>
+  <div class="sidebar-body" id="sb-body"></div>
+</aside>
+<div class="toast" id="toast">Copied</div>
+
+<div class="picks-panel" id="picks-panel" aria-hidden="true">
+  <div class="picks-panel-header">
+    <h3>Hook picks</h3>
+    <button type="button" class="btn-ghost" id="close-picks" aria-label="Close picks">Close</button>
+  </div>
+  <div class="picks-panel-body" id="picks-list"></div>
+  <div class="picks-panel-footer">
+    <button type="button" id="download-picks">Download JSON</button>
+    <button type="button" class="danger" id="clear-picks">Clear picks</button>
+  </div>
+</div>
+<script src="board.js"></script>
+</body>
+</html>

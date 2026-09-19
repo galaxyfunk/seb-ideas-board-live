@@ -1,19 +1,11 @@
 (async function(){
-  async function gunzipB64(url){
-    const b64 = (await (await fetch(url,{cache:'no-store'})).text()).trim();
-    const bytes = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
-    return await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).text();
-  }
   try {
-    const css = await gunzipB64('s0.b64');
+    const css = await (await fetch('styles.css',{cache:'no-store'})).text();
     const st = document.createElement('style');
     st.textContent = css;
     document.head.appendChild(st);
-    const parts = await Promise.all([0,1,2].map(i => fetch('j'+i+'.b64',{cache:'no-store'}).then(r=>r.text())));
-    const b64 = parts.map(t => t.trim()).join('');
-    const bytes = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
-    const text = await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).text();
-    (0, eval)(text);
+    const js = await (await fetch('board-app.js',{cache:'no-store'})).text();
+    (0, eval)(js);
   } catch (err) {
     console.error(err);
     document.body.innerHTML = '<main style="font-family:system-ui;padding:2rem"><h1>Seb Ideas Board</h1><p>Failed to load board: '+String(err)+'</p></main>';

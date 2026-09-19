@@ -1,3 +1,3 @@
 # Seb Ideas Board
 
-Prefer/Posted learning loop. Cards loaded from `cards.json` (67 enriched ideas). Board v3: clarity fields, Draft LinkedIn, Open in Grok, Save to Doc.
+Prefer/Posted learning loop. Board v3: jist/what_wed_say, Draft LinkedIn, Open in Grok, Save to Doc. Header = CE logo + Seb. Filters collapsed by default.

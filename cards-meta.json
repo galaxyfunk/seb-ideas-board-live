@@ -9,6 +9,8 @@
     "draft_linkedin",
     "open_in_grok",
     "save_to_doc",
-    "prefer_posted"
+    "prefer_posted",
+    "filters_collapsed_default",
+    "header_logo_seb"
   ]
 }
